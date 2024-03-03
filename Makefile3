@@ -1,0 +1,19 @@
+main: main.o engine_main.o \
+		mat4.o vec4.o
+	g++ -g -o main.o engine_main.o \
+		mat4.o vec4.o
+
+main.o: src/main.cpp
+	g++ -c src/main.cpp
+
+engine_main.o: src/k2_engine/engine_main.cpp \
+			   src/k2_engine/engine_main.hpp
+	g++ -c src/k2_engine/engine_main.cpp 	
+
+mat4.o: src/k2_engine/classes/mat4.cpp \
+		src/k2_engine/classes/headers/mat4.hpp
+	g++ -c src/k2_engine/classes/mat4.cpp
+
+vec4.o: src/k2_engine/classes/vec4.cpp \
+		src/k2_engine/classes/headers/vec4.hpp
+	g++ -c src/k2_engine/classes/vec4.cpp
