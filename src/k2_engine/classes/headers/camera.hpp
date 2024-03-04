@@ -14,7 +14,12 @@ class Camera{
     double screendist;
 
     public:
-
+    Camera():rotX(0),rotY(0),rotZ(0),pos(Vec4(0, 0, 0)),screendist(5){}
+    double setrotation(double xr, double yr, double zr);
+    double getrotX() const{return rotX;}
+    double getrotY() const{return rotY;}
+    double getrotZ() const{return rotZ;}
+    double getdist() const{return screendist;}
     Vec4 getpos() const{return pos;}
     void setpos(const Vec4& newpos){pos = newpos;}
     void offsetpos(double xmod, double ymod, double zmod);

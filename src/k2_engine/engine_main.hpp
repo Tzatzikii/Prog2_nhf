@@ -14,9 +14,12 @@
 #include <limits>
 #include <vector>
 
-extern const double PI;
 
 namespace k2_engine{
+
+extern const double PI;
+extern const int TERMINAL_WIDTH;
+extern const int TERMINAL_HEIGHT;
 
 class Renderer{
     std::vector<Vec4> globalvectors;
@@ -24,10 +27,16 @@ class Renderer{
     std::vector<Vertex2> flatvertices;
     std::vector<Lightsource> lights;
     Camera camera;
+    int flatscreenoffsetX;
+    int flatscreenoffsetY;
 
     void set_relative_vertices();
-    void project_verices();
+    void project_vertices();
+
     public:
+
+    Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){};
+    void pushvec4(Vec4 vector);
 
     void render();
     void rasterize();

@@ -8,4 +8,5 @@ void Camera::offsetpos(double xmod, double ymod, double zmod){
     pos.setZ(pos.getZ()+zmod);
 }
 
+
 }

@@ -22,6 +22,7 @@ public:
     void setW(int n){w = n;}
 
     Vec4& operator*=(const Mat4& lhs_m);
+    Vec4 operator-(const Vec4& rhs_v) const;
 
 }; //class Vec4
 

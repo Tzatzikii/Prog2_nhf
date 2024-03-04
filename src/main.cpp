@@ -2,15 +2,16 @@
 
 using namespace k2_engine;
 int main(){
+
+    Renderer renderer;
+    renderer.pushvec4(Vec4(10, 10, 10));
+    renderer.pushvec4(Vec4(10, 10, 50));
+    renderer.pushvec4(Vec4(0, 10, 10));
+    renderer.render();
+    std::cout<<std::endl;
+
     // outp::Cursor().hide(); //disables on exit
     // outp::Rawmode().enable(); //disables on exit
-    char c;
-    int x = 1;
-    int y = 1;
-    Mat4 m(Mat4::ROTATION_X, PI/2);
-    Mat4 m2;
-    Vec4 v(1, 1, 1);
-    std::cout << v.getX() << std::endl;
     // while(c != 'q'){
     //     outp::coutXY<int>(x, y, m(0, 0));
     //     c = outp::keystroke();
