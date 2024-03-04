@@ -9,8 +9,9 @@ CC = g++
 FLAGS = -Werror
 DEBUGFLAGS = -g
 
-OBJS = main.o engine_main.o \
-		mat4.o vec4.o output.o
+OBJS =  main.o engine_main.o mat4.o vec4.o vertex.o \
+		lightsource.o camera.o \
+		output.o
 MISC = dep/output.hpp
 
 $(TARGET): $(OBJS) $(MISC)
@@ -27,6 +28,15 @@ mat4.o: $(CLASSES)/mat4.cpp $(CLASS_HEADERS)/mat4.hpp
 
 vec4.o: $(CLASSES)/vec4.cpp $(CLASS_HEADERS)/vec4.hpp
 	$(CC) -c $(CLASSES)/vec4.cpp
+
+vertex.o: $(CLASSES)/vertex.cpp $(CLASS_HEADERS)/vertex.hpp
+	$(CC) -c $(CLASSES)/vertex.cpp
+
+lightsource.o: $(CLASSES)/lightsource.cpp $(CLASS_HEADERS)/lightsource.hpp
+	$(CC) -c $(CLASSES)/lightsource.cpp
+
+camera.o: $(CLASSES)/camera.cpp $(CLASS_HEADERS)/camera.hpp
+	$(CC) -c $(CLASSES)/camera.cpp
 
 output.o: $(DEPENDENCIES)/output.cpp $(DEPENDENCIES)/output.hpp
 	$(CC) -c $(DEPENDENCIES)/output.cpp

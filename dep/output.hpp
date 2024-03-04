@@ -1,5 +1,5 @@
-#ifndef OUTPUT_HPP
-#define OUTPUT_HPP
+#ifndef OUTPUT_HPP_
+#define OUTPUT_HPP_
 
 #include <iostream>
 #include <cassert>
@@ -24,20 +24,23 @@ struct Rawmode{
 char keystroke();
 #endif //__linux__
 
-extern struct termios original;
 struct Cursor{
     static void hide();
     static void show();
     static void move(int x, int y);
+    static void reset();
 };
+inline void clrscrn(){ std::cout << "\x1B[2J"; }
 
-inline void coutXY(int x, int y, const char c){
+template <typename T>
+void coutXY(int x, int y, const T c, bool duplicate = true, bool stretch = true){
+    if(stretch) x*=2;
     Cursor().move(x, y);
     std::cout << c;
+    if(duplicate) std::cout << c;
 }
 
-inline void clrscrn(){ std::cout << "\x1B[2J"; }
 
 } //namespace outp
 
-#endif //OUTPUT_HPP
+#endif //OUTPUT_HPP_
