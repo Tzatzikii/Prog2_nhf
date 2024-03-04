@@ -2,11 +2,12 @@
 
 using namespace k2_engine;
 int main(){
-
+    outp::clrscrn();
     Renderer renderer;
     renderer.pushvec4(Vec4(10, 10, 10));
-    renderer.pushvec4(Vec4(10, 10, 50));
-    renderer.pushvec4(Vec4(0, 10, 10));
+    renderer.pushvec4(Vec4(10, 10, 20));
+    renderer.pushvec4(Vec4(0, 10, 50));
+    renderer.addlsource(Lightsource(Vec4(10, 30, 30), 30, 10));
     renderer.render();
     std::cout<<std::endl;
 
@@ -22,8 +23,10 @@ int main(){
     //     outp::clrscrn();
     // }
 
-    //outp::Cursor().reset();
+    outp::Cursor().reset();
     //Cursor show
     //Rawmode enable
+
+    //outp::clrscrn();
     return 0;
 }

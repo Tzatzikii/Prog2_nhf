@@ -33,7 +33,7 @@ struct Cursor{
 inline void clrscrn(){ std::cout << "\x1B[2J"; }
 
 template <typename T>
-void coutXY(int x, int y, const T c, bool duplicate = true, bool stretch = true){
+inline void coutXY(int x, int y, const T c, bool duplicate = true, bool stretch = true){
     if(stretch) x*=2;
     Cursor().move(x, y);
     std::cout << c;

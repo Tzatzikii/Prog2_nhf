@@ -8,16 +8,31 @@ const int TERMINAL_WIDTH = 80;
 void Renderer::pushvec4(Vec4 vector){
     globalvectors.push_back(vector);
 }
+
+void Renderer::addlsource(Lightsource lsource){
+    lights.push_back(lsource);
+}
 void Renderer::render(){
     set_relative_vertices();
     project_vertices();
     for(int i = 0; i < flatvertices.size(); i++){
         Vertex2& current = flatvertices[i];
-        outp::coutXY((int)current.getX(), (int)current.getY(), '#');
+        outp::coutXY<char>((int)current.getX(), (int)current.getY(), current.gettxtr());
     }
     
 }
-
+double Renderer::calculate_luminosity(Vec4& v){
+    double luminosity = 0;
+    for(int i = 0; i < lights.size(); i++){
+        Lightsource current = lights[i];
+        double vdist = pyth3d(v.getX() - current.getpos().getX(),
+                              v.getY() - current.getpos().getY(),
+                              v.getZ() - current.getpos().getZ());
+        if(vdist < current.getdist()) continue;
+        luminosity += (current.getbrightness()*(LUMINOSITY_MAX / vdist))/lights.size();
+    }
+    return luminosity;
+}
 void Renderer::set_relative_vertices(){
 
     Mat4 rotx_m(Mat4::ROTATION_X, camera.getrotX());
@@ -28,7 +43,8 @@ void Renderer::set_relative_vertices(){
         Vec4& current = globalvectors[i];
         Vec4 relative;
         relative = rotx_m*roty_m*rotz_m*(current - camera.getpos());
-        localvertices.push_back(Vertex3(relative));
+        double luminosity = calculate_luminosity(current);
+        localvertices.push_back(Vertex3(relative, luminosity));
     }
 }
 
@@ -39,7 +55,7 @@ void Renderer::project_vertices(){
         Vertex3& current = localvertices[i];
         double projected_x = camera.getdist()/current.getZ()*current.getX() + flatscreenoffsetX;
         double projected_y = camera.getdist()/current.getZ()*current.getY() + flatscreenoffsetY;
-        flatvertices.push_back(Vertex2(projected_x, projected_y));
+        flatvertices.push_back(Vertex2(projected_x, projected_y, current.getgrayscale()));
     }
     
 

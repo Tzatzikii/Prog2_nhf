@@ -21,6 +21,9 @@ extern const double PI;
 extern const int TERMINAL_WIDTH;
 extern const int TERMINAL_HEIGHT;
 
+inline double pyth2d(double a, double b){return sqrt(a*a + b*b);}
+inline double pyth3d(double a, double b, double c){return sqrt(a*a + b*b + c*c);}
+
 class Renderer{
     std::vector<Vec4> globalvectors;
     std::vector<Vertex3> localvertices;
@@ -32,11 +35,13 @@ class Renderer{
 
     void set_relative_vertices();
     void project_vertices();
+    double calculate_luminosity(Vec4& v);
 
     public:
 
     Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){};
     void pushvec4(Vec4 vector);
+    void addlsource(Lightsource lsource);
 
     void render();
     void rasterize();
