@@ -17,7 +17,12 @@ void Renderer::render(){
     project_vertices();
     for(int i = 0; i < flatvertices.size(); i++){
         Vertex2& current = flatvertices[i];
-        outp::coutXY<char>((int)current.getX(), (int)current.getY(), current.gettxtr());
+        int screenx = (int)current.getX();
+        int screeny = (int)current.getY();
+        screenx = clamp(screenx, 0, TERMINAL_WIDTH);
+        screeny = clamp(screeny, 0, TERMINAL_HEIGHT);
+        
+        outp::coutXY<char>(screenx, screeny, current.gettxtr());
     }
     
 }
@@ -28,24 +33,34 @@ double Renderer::calculate_luminosity(Vec4& v){
         double vdist = pyth3d(v.getX() - current.getpos().getX(),
                               v.getY() - current.getpos().getY(),
                               v.getZ() - current.getpos().getZ());
-        if(vdist < current.getdist()) continue;
-        luminosity += (current.getbrightness()*(LUMINOSITY_MAX / vdist))/lights.size();
+        if(vdist > current.getdist()) luminosity += 0;
+        else luminosity += (LUMINOSITY_MAX*(current.getbrightness()/vdist))/lights.size();
+        luminosity = clamp<double>(luminosity, 0, LUMINOSITY_MAX - 1);
+        //else luminosity += (LUMINOSITY_MAX*(vdist/(current.getdist()*1/current.getbrightness())))/lights.size();
+
+        #ifdef DEBUG
+        std::cout << "vdist: " << vdist << " luminosity: "  << luminosity << std::endl;
+        #endif //DEBUG
     }
     return luminosity;
 }
-void Renderer::set_relative_vertices(){
 
+Vertex3 Renderer::set_realtive_vertex(Vec4& v){
     Mat4 rotx_m(Mat4::ROTATION_X, camera.getrotX());
     Mat4 roty_m(Mat4::ROTATION_Y, camera.getrotY());
     Mat4 rotz_m(Mat4::ROTATION_Z, camera.getrotZ());
 
-    for(int i = 0; i < globalvectors.size(); i++){
-        Vec4& current = globalvectors[i];
-        Vec4 relative;
-        relative = rotx_m*roty_m*rotz_m*(current - camera.getpos());
-        double luminosity = calculate_luminosity(current);
-        localvertices.push_back(Vertex3(relative, luminosity));
-    }
+    Vec4 relative = rotx_m*roty_m*(v - camera.getpos());
+    double luminosity = calculate_luminosity(v);
+    return Vertex3(relative, luminosity);
+}
+
+Vertex2 Renderer::project_vertex(Vertex3& vx){
+    // Ez így elég csúnya lesz (as in: mátrixokkal szebb lenne),
+    // de lusta vagyok újraírni.. :v)
+    double projected_x = camera.getdist()/vx.getZ()*vx.getX() + flatscreenoffsetX;
+    double projected_y = camera.getdist()/vx.getZ()*vx.getY() + flatscreenoffsetY;
+    return Vertex2(projected_x, projected_y, vx.getgrayscale());
 }
 
 void Renderer::project_vertices(){
@@ -53,12 +68,16 @@ void Renderer::project_vertices(){
     // de lusta vagyok újraírni.. :v)
     for(int i = 0; i < localvertices.size(); i++){
         Vertex3& current = localvertices[i];
-        double projected_x = camera.getdist()/current.getZ()*current.getX() + flatscreenoffsetX;
-        double projected_y = camera.getdist()/current.getZ()*current.getY() + flatscreenoffsetY;
-        flatvertices.push_back(Vertex2(projected_x, projected_y, current.getgrayscale()));
+        flatvertices.push_back(project_vertex(current));
     }
     
 
+}
+void Renderer::set_relative_vertices(){
+    for(int i = 0; i < globalvectors.size(); i++){
+        Vec4& current = globalvectors[i];
+        localvertices.push_back(set_realtive_vertex(current));
+    }
 }
 
 }

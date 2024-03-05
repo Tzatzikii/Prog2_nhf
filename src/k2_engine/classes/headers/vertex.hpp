@@ -7,6 +7,8 @@
 #include <cmath>
 #include <cstring>
 #include <iostream>
+#include <vector>
+#include "../../../../dep/utils.hpp"
 
 namespace k2_engine{
 
@@ -16,14 +18,16 @@ class Vertex2{
     double x, y;
     char lumin_txtr;
 
+    void plothigh_interp(const Vertex2& v0, const Vertex2& v1, std::vector<Vertex2&>& vertexarray);
+    void plotlow_inpterp(const Vertex2& v0, const Vertex2& v1, std::vector<Vertex2&>& vertexarray);
+
     public:
     Vertex2(double x, double y, char lumin_txtr):x(x),y(y),lumin_txtr(lumin_txtr){}
     double getX(){return x;}
     double getY(){return y;}
     char gettxtr(){return lumin_txtr;}
-    static void rasterize(Vertex2& v0, Vertex2& v1, Vertex2& v2);
+    static void bresenham(const Vertex2& v0, const Vertex2& v1, std::vector<Vertex2&>& vertexarray);
     static void interpolate(Vertex2& v0, Vertex2& v1);
-    static void interpolate(double x, double y, double lumin1, double lumin2);
 };
 
 class Vertex3{
@@ -40,6 +44,27 @@ public:
     Vertex3(const Vec4&, double lumin);
 
     
+};
+
+class Triangle{
+    Vertex3& vx0;
+    Vertex3& vx1;
+    Vertex3& vx2;
+
+    public:
+
+    Triangle(Vertex3& vx0, Vertex3& vx1, Vertex3& vx2):vx0(vx0),vx1(vx1),vx2(vx2){}
+};
+
+class RenderTriangle{
+    Vertex2& vx0;
+    Vertex2& vx1;
+    Vertex2& vx2;
+
+    public: 
+
+    RenderTriangle(Vertex2& vx0, Vertex2& vx1, Vertex2& vx2):vx0(vx0),vx1(vx1),vx2(vx2){}
+    void rasterize();
 };
 
 } // namespace k2_engine

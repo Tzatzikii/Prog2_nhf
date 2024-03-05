@@ -3,6 +3,9 @@
 namespace outp{
 
 #ifdef __linux__
+
+
+
 static struct termios original;
 void Rawmode::disable(){
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &original);
@@ -15,20 +18,41 @@ void Rawmode::enable(){
     raw.c_lflag &= ~(ECHO | ICANON);
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
-
+int kbhit(){
+    int count = 0;
+    ioctl(STDIN_FILENO, FIONREAD, &count);
+    return count;
+}
 
 #endif //__linux__
 
 void Cursor::hide(){ std::cout << "\x1B[?25l"; atexit(show);}
 void Cursor::show(){ std::cout << "\x1B[?25h";}
-void Cursor::move(int x, int y){ std::cout << "\x1B[" << y << ';' << x << 'H'; }
+void Cursor::move(size_t x, size_t y){ std::cout << "\x1B[" << y << ';' << x << 'H'; }
 void Cursor::reset(){move(0, 0); show();}
 
-char keystroke(){
-    char c;
-    return std::getchar();
-}
+OutputBuffer::OutputBuffer(size_t bufferwidth, size_t bufferheight):bufferwidth(bufferwidth),bufferheight(bufferheight){
+    for(int i = 0; i < bufferwidth; i++){
 
+        std::vector<char> column;
+        buffer.push_back(column);
+        for(int j = 0; j < bufferheight; j++){
+            buffer[i].push_back(0);
+        }
+    }
+}
+void OutputBuffer::setbuffer(size_t i, size_t j, char c){
+    assert(i >= 0 && i < bufferwidth);
+    assert(j >= 0 && j < bufferheight);
+    buffer[i][j] = c;
+}
+void OutputBuffer::pushtostdout(){
+    for(int i = 0; i < bufferwidth; i++){
+        for(int j = 0; j < bufferheight; j++){
+            coutXY<char>(i, j, buffer[i][j]);
+        }
+    }
+}
 
 
 } //namespace outp

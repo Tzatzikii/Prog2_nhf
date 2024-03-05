@@ -12,9 +12,11 @@ DEBUGFLAGS = -g
 OBJS =  main.o engine_main.o mat4.o vec4.o vertex.o \
 		lightsource.o camera.o \
 		output.o
-MISC = dep/output.hpp
+HEADERS = $(CLASS_HEADERS)/camera.hpp $(CLASS_HEADERS)/lightsource.hpp \
+			$(CLASS_HEADERS)/mat4.hpp $(CLASS_HEADERS)/vec4.hpp $(CLASS_HEADERS)/vertex.hpp \
+			$(DEPENDENCIES)/output.hpp $(DEPENDENCIES)/utils.hpp
 
-$(TARGET): $(OBJS) $(MISC)
+$(TARGET): $(OBJS) $(HEADERS)
 	$(CC) -o $(TARGET) $(FLAGS) $(OBJS)
 
 main.o: $(SOURCE)/main.cpp
