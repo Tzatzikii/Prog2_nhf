@@ -37,7 +37,7 @@ OutputBuffer::OutputBuffer(size_t bufferwidth, size_t bufferheight):bufferwidth(
         std::vector<char> column;
         buffer.push_back(column);
         for(int j = 0; j < bufferheight; j++){
-            buffer[i].push_back(0);
+            buffer[i].push_back(' ');
         }
     }
 }
@@ -53,6 +53,12 @@ void OutputBuffer::pushtostdout(){
         }
     }
 }
-
+void OutputBuffer::clearbuffer(){
+    for(int i = 0; i < bufferwidth; i++){
+        for(int j = 0; j < bufferheight; j++){
+            buffer[i][j] = ' ';
+        }
+    }
+}
 
 } //namespace outp

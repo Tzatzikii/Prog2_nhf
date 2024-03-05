@@ -2,8 +2,8 @@
 
 namespace k2_engine{
 const double PI = 3.14159265;
-const int TERMINAL_HEIGHT = 24;
-const int TERMINAL_WIDTH = 80;
+const size_t TERMINAL_HEIGHT = 24;
+const size_t TERMINAL_WIDTH = 80;
 
 void Renderer::pushvec4(Vec4 vector){
     globalvectors.push_back(vector);
@@ -17,13 +17,14 @@ void Renderer::render(){
     project_vertices();
     for(int i = 0; i < flatvertices.size(); i++){
         Vertex2& current = flatvertices[i];
-        int screenx = (int)current.getX();
-        int screeny = (int)current.getY();
-        screenx = clamp(screenx, 0, TERMINAL_WIDTH);
-        screeny = clamp(screeny, 0, TERMINAL_HEIGHT);
-        
-        outp::coutXY<char>(screenx, screeny, current.gettxtr());
+        if(current.getX() < TERMINAL_WIDTH && current.getY() < TERMINAL_HEIGHT && current.getX() > 0 && current.getY() > 0){
+            outbuf.setbuffer(current.getX(), current.getY(), current.gettxtr());
+        }
     }
+    localvertices.clear();
+    flatvertices.clear();
+    outbuf.pushtostdout();
+    outbuf.clearbuffer();
     
 }
 double Renderer::calculate_luminosity(Vec4& v){

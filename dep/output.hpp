@@ -51,6 +51,7 @@ class OutputBuffer{
     public:
 
     OutputBuffer(size_t bufferwidth, size_t bufferheight);
+    void clearbuffer();
     void setbuffer(size_t i, size_t j, char c);
     void pushtostdout();
 };

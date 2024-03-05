@@ -29,7 +29,7 @@ int main(){
         if(c == 'a') camera.offsetpos(-1, 0, 0);
         if(c == 'd') camera.offsetpos(1, 0, 0);
         renderer.render();
-        outp::usleep(1000*50);
+        //outp::usleep(1000*50);
     }
 
     outp::Cursor().reset();

@@ -19,8 +19,8 @@
 namespace k2_engine{
 
 extern const double PI;
-extern const int TERMINAL_WIDTH;
-extern const int TERMINAL_HEIGHT;
+extern const size_t TERMINAL_WIDTH;
+extern const size_t TERMINAL_HEIGHT;
 
 
 class Renderer{
@@ -33,6 +33,8 @@ class Renderer{
     std::vector<Lightsource> lights;
     int flatscreenoffsetX;
     int flatscreenoffsetY;
+
+    outp::OutputBuffer outbuf{TERMINAL_WIDTH, TERMINAL_HEIGHT};
 
     Vertex3 set_realtive_vertex(Vec4& v);
     Vertex2 project_vertex(Vertex3& vx);
