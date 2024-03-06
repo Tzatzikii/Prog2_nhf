@@ -36,7 +36,7 @@ class Renderer{
 
     outp::OutputBuffer outbuf{TERMINAL_WIDTH, TERMINAL_HEIGHT};
 
-    Vertex3 set_realtive_vertex(Vec4& v);
+    Vertex3 set_realtive_vertex(Vec4 v);
     Vertex2 project_vertex(Vertex3& vx);
 
     void set_relative_vertices();
@@ -45,9 +45,12 @@ class Renderer{
 
     public:
     Camera camera;
+    Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){
 
-    Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){};
-    void pushvec4(Vec4 vector);
+    }
+    //void pushvec4(Vec4 vector);
+    void addtriangle(Triangle triangle);
+    void addtriangle(Vec4& v0, Vec4& v1, Vec4& v2);
     void addlsource(Lightsource lsource);
 
     void render();

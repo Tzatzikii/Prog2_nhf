@@ -5,7 +5,7 @@
 
 namespace k2_engine{
 
-//#define DEBUG
+#define DEBUG
 
 template <typename T>
 inline void swap(T& A, T& B){
@@ -18,6 +18,9 @@ inline T clamp(T val, T min, T max){
     if(val < min) return min;
     else if(val > max) return max;
     return val;
+}
+inline bool boundary(double val, double min, double max){
+    return (val > min && val < max);
 }
 
 inline double pyth2d(double a, double b){return sqrt(a*a + b*b);}

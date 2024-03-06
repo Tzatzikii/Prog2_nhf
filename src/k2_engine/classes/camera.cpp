@@ -8,5 +8,10 @@ void Camera::offsetpos(double xmod, double ymod, double zmod){
     pos.setZ(pos.getZ()+zmod);
 }
 
+void Camera::rotate(double dx, double dy, double dz){
+    rotX += dx;
+    rotY += dy;
+    rotZ += dz;
+}
 
 }

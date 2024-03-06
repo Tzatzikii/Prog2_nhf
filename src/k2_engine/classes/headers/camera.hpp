@@ -14,8 +14,8 @@ class Camera{
     double screendist;
 
     public:
-    Camera():rotX(0),rotY(0),rotZ(0),pos(Vec4(0, 0, 0)),screendist(5){}
-    double setrotation(double xr, double yr, double zr);
+    Camera():rotX(0),rotY(0),rotZ(0),pos(Vec4(0, 0, 0)),screendist(10){}
+    void rotate(double dx, double dy, double dz);
     double getrotX() const{return rotX;}
     double getrotY() const{return rotY;}
     double getrotZ() const{return rotZ;}
