@@ -13,42 +13,39 @@
 
 namespace k2_engine{
 
-extern const char GRAYSCALE[];
+char calculate_grayscale(double luminosity);
 
+extern const char GRAYSCALE[];
 class Vertex2{
     double x, y;
     double flatlumin;
-    char texture;
 
-    char calculate_grayscale();
-    void plothigh_interp(Vertex2& v0, Vertex2& v1, std::vector<Vertex2>& vertexarray);
-    void plotlow_inpterp(Vertex2& v0, Vertex2& v1, std::vector<Vertex2>& vertexarray);
 
     public:
-    Vertex2(double x, double y, char lumin_txtr);
-    double getX(){return x;}
-    double getY(){return y;}
-    double getluminosity(){return flatlumin;}
-    char gettxtr(){return texture;}
-    static void bresenham(const Vertex2& v0, const Vertex2& v1, std::vector<Vertex2>& vertexarray);
-    static double interpolate(double n0, double n1, double diff);
+    Vertex2(double x, double y, double flatlumin);
+    double getX() const{return x;}
+    double getY() const{return y;}
+    double getluminosity() const{return flatlumin;}
+    
 };
 
 class Vertex3{
     double x, y, z, luminosity;
-    char grayscale;
 
 public:
-    double getX() const{return x;}
-    double getY() const{return y;}
-    double getZ() const{return z;}
-    double getluminosity(){return luminosity;}
-    double getgrayscale(){return grayscale;}
+    double getX() const {return x;}
+    double getY() const {return y;}
+    double getZ() const {return z;}
+    double getluminosity() const {return luminosity;}
     Vertex3(const Vec4&, double lumin);
 
     
 };
-
+struct Ept{ //Edge point
+    int x, y;
+    double luminosity;
+    Ept(int x, int y, double luminosity):x(x),y(y),luminosity(luminosity){}
+};
 class Triangle{
     Vec4 v0;
     Vec4 v1;
@@ -57,22 +54,28 @@ class Triangle{
     public:
 
     Triangle(Vec4 v0, Vec4 v1, Vec4 v2):v0(v0),v1(v1),v2(v2){}
-    Vec4 getv0(){return v0;}
-    Vec4 getv1(){return v1;}
-    Vec4 getv2(){return v2;}
+    Vec4 getv0() const {return v0;}
+    Vec4 getv1() const {return v1;}
+    Vec4 getv2() const {return v2;}
 };
 
 class RenderTriangle{
     Vertex2 vx0;
     Vertex2 vx1;
     Vertex2 vx2;
+    std::vector<Ept> edge0;
+    std::vector<Ept> edge1;
+    std::vector<Ept> edge2;
 
     public: 
 
     RenderTriangle(Vertex2 vx0, Vertex2 vx1, Vertex2 vx2):vx0(vx0),vx1(vx1),vx2(vx2){}
-    Vertex2 getvx0(){return vx0;}
-    Vertex2 getvx1(){return vx1;}
-    Vertex2 getvx2(){return vx2;}
+    std::vector<Ept>& edge0ref(){return edge0;};
+    std::vector<Ept>& edge1ref(){return edge1;};
+    std::vector<Ept>& edge2ref(){return edge2;};
+    Vertex2 getvx0() const {return vx0;}
+    Vertex2 getvx1() const {return vx1;}
+    Vertex2 getvx2() const {return vx2;}
     void rasterize();
 };
 

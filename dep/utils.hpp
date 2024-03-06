@@ -5,7 +5,7 @@
 
 namespace k2_engine{
 
-#define DEBUG
+//#define DEBUG
 
 template <typename T>
 inline void swap(T& A, T& B){

@@ -22,14 +22,13 @@ extern const double PI;
 extern const size_t TERMINAL_WIDTH;
 extern const size_t TERMINAL_HEIGHT;
 
+double interpolate(double n0, double n1, double diff);
 
 class Renderer{
     std::vector<Triangle> globaltriangles;
     std::vector<RenderTriangle> flattriangles;
 
     std::vector<Vec4> globalvectors;
-    std::vector<Vertex3> localvertices;
-    std::vector<Vertex2> flatvertices;
     std::vector<Lightsource> lights;
     int flatscreenoffsetX;
     int flatscreenoffsetY;
@@ -43,18 +42,22 @@ class Renderer{
     void project_vertices();
     double calculate_luminosity(Vec4& v);
 
+
+    void plothigh_interp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& vertexarray);
+    void plotlow_inpterp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& vertexarray);
+
     public:
     Camera camera;
-    Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){
-
-    }
-    //void pushvec4(Vec4 vector);
+    Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){}
+    
     void addtriangle(Triangle triangle);
     void addtriangle(Vec4& v0, Vec4& v1, Vec4& v2);
     void addlsource(Lightsource lsource);
 
     void render();
     void rasterize();
+
+    void bresenham(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& edge);
     
 
 }; 

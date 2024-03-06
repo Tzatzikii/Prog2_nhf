@@ -2,12 +2,10 @@
 
 namespace k2_engine{
 const double PI = 3.14159265;
-const size_t TERMINAL_HEIGHT = 24;
+const size_t TERMINAL_HEIGHT = 40;
 const size_t TERMINAL_WIDTH = 80;
 
-// void Renderer::pushvec4(Vec4 vector){
-//     globalvectors.push_back(vector);
-// }
+
 
 void Renderer::addlsource(Lightsource lsource){
     lights.push_back(lsource);
@@ -22,24 +20,9 @@ void Renderer::render(){
     }
     for(int i = 0; i < flattriangles.size(); i++){
         RenderTriangle& current = flattriangles[i];
-        double x0 = current.getvx0().getX();
-        double y0 = current.getvx0().getY();
-        double x1 = current.getvx1().getX();
-        double y1 = current.getvx1().getY();
-        double x2 = current.getvx2().getX();
-        double y2 = current.getvx2().getY();
-        #ifdef DEBUG
-        //std::cout << x
-        #endif // DEBUG
-        if(boundary(x0, 0, TERMINAL_WIDTH) && boundary(y0, 0, TERMINAL_HEIGHT)){
-            outbuf.setbuffer(x0, y0, current.getvx0().gettxtr());
-        }
-        if(boundary(x1, 0, TERMINAL_WIDTH) && boundary(y1, 0, TERMINAL_HEIGHT)){
-            outbuf.setbuffer(x1, y1, current.getvx1().gettxtr());
-        }
-        if(boundary(x2, 0, TERMINAL_WIDTH) && boundary(y2, 0, TERMINAL_HEIGHT)){
-            outbuf.setbuffer(x2, y2, current.getvx2().gettxtr());
-        }
+        bresenham(current.getvx0(), current.getvx1(), current.edge0ref());
+        bresenham(current.getvx1(), current.getvx2(), current.edge1ref());
+        bresenham(current.getvx2(), current.getvx0(), current.edge2ref());
     }
     flattriangles.clear();
     outbuf.pushtostdout();
@@ -56,21 +39,7 @@ void Renderer::addtriangle(Triangle t){
     
     globaltriangles.push_back(t);
 }
-// void Renderer::render(){
-//     set_relative_vertices();
-//     project_vertices();
-//     for(int i = 0; i < flatvertices.size(); i++){
-//         Vertex2& current = flatvertices[i];
-//         if(current.getX() < TERMINAL_WIDTH && current.getY() < TERMINAL_HEIGHT && current.getX() > 0 && current.getY() > 0){
-//             outbuf.setbuffer(current.getX(), current.getY(), current.gettxtr());
-//         }
-//     }
-//     localvertices.clear();
-//     flatvertices.clear();
-//     outbuf.pushtostdout();
-//     outbuf.clearbuffer();
-    
-// }
+
 double Renderer::calculate_luminosity(Vec4& v){
     double luminosity = 0;
     for(int i = 0; i < lights.size(); i++){
@@ -108,19 +77,83 @@ Vertex2 Renderer::project_vertex(Vertex3& vx){
     return Vertex2(projected_x, projected_y, vx.getluminosity());
 }
 
-// void Renderer::project_vertices(){
-//     for(int i = 0; i < localvertices.size(); i++){
-//         Vertex3& current = localvertices[i];
-//         flatvertices.push_back(project_vertex(current));
-//     } 
-// }
-// void Renderer::set_relative_vertices(){
-//     for(int i = 0; i < globalvectors.size(); i++){
-//         Vec4& current = globalvectors[i];
-//         localvertices.push_back(set_realtive_vertex(current));
-//     }
-// }
 
+double interpolate(double n0, double n1, double diff){
+    double dn = fabs(n1 - n0);
+    return n0 + dn*diff;
+}
 
+void Renderer::plothigh_interp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& edge){
+    int dx = (int)(v1.getX() - v0.getX());
+    int dy = (int)(v1.getX() - v0.getY());
+    int xi = 1;
+    if(dx < 0){
+        xi = -1;
+        dx = -dx;
+    }
+    int D = (2 * dx) - dy;
+    int x = (int)(v0.getX());
+    for(int y = (int)v0.getY(); y < (int)v1.getY(); y++){
+        double diff = (double)y/(double)dy;
+        double interpolated_lumin = interpolate(v0.getluminosity(), v1.getluminosity(), diff);
+        edge.push_back(Ept(x, y, interpolated_lumin));
+        if(boundary(x, 0, TERMINAL_WIDTH) && boundary(y, 0, TERMINAL_HEIGHT)){
+            outbuf.setbuffer(x, y, calculate_grayscale(interpolated_lumin));
+        }
+        if(D > 0){
+            x += xi;
+            D += 2*(dx - dy);
+        }
+        else{
+            D += 2*dx;
+        } 
+    }
+}
+void Renderer::plotlow_inpterp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& edge){
+    int dx = (int)(v1.getX() - v0.getX());
+    int dy = (int)(v1.getX() - v0.getY());
+    int yi = 1;
+    if(dy < 0){
+        yi = -1;
+        dy = -dy;
+    }
+    int D = (2*dy) - dx;
+    int y = (int)v0.getY();
+    for(int x = (int)v0.getX(); x < (int)v1.getX(); x++){
+        double diff = (double)x/(double)dx;
+        char interpolated_lumin = interpolate(v0.getluminosity(), v1.getluminosity(), diff);
+        edge.push_back(Ept(x, y, interpolated_lumin));
+        if(boundary(x, 0, TERMINAL_WIDTH) && boundary(y, 0, TERMINAL_HEIGHT)){
+            outbuf.setbuffer(x, y, calculate_grayscale(interpolated_lumin));   
+        }
+        if(D > 0){
+            y += yi;
+            D += 2*(dy - dx);
+        }
+        else{
+            D+= 2*dy;
+        }
+    }
+}
+
+void Renderer::bresenham(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& edge){
+    double dx = v1.getX() - v0.getX();
+    double dy = v1.getY() - v0.getY();
+    if(fabs(dy) < fabs(dx)){
+        if(dx < 0){
+            plotlow_inpterp(v1, v0, edge);
+        }
+        else{
+            plotlow_inpterp(v0, v1, edge);
+        }
+    }else{
+        if(dy < 0){
+            plothigh_interp(v1, v0, edge);
+        }
+        else{
+            plothigh_interp(v0, v1, edge);
+        }
+    }
+}
 
 }
