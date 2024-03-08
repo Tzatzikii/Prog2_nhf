@@ -14,10 +14,9 @@ inline void swap(T& A, T& B){
     B = C;
 }
 template <typename T>
-inline T clamp(T val, T min, T max){
-    if(val < min) return min;
-    else if(val > max) return max;
-    return val;
+inline void clamp(T& val, T min, T max){
+    if(val < min) val = min;
+    else if(val > max) val = max;
 }
 inline bool boundary(double val, double min, double max){
     return (val > min && val < max);

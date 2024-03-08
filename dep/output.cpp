@@ -8,20 +8,22 @@ namespace outp{
 
 static struct termios original;
 void Rawmode::disable(){
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &original);
+        tcsetattr(STDIN_FILENO, TCSAFLUSH, &original);
 }
 
 void Rawmode::enable(){
-    tcgetattr(STDIN_FILENO, &original);
-    struct termios raw = original;
-    atexit(disable);
-    raw.c_lflag &= ~(ECHO | ICANON);
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+
+        tcgetattr(STDIN_FILENO, &original);
+        struct termios raw = original;
+        atexit(disable);
+        raw.c_lflag &= ~(ECHO | ICANON);
+        tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 int kbhit(){
-    int count = 0;
-    ioctl(STDIN_FILENO, FIONREAD, &count);
-    return count;
+
+        int count = 0;
+        ioctl(STDIN_FILENO, FIONREAD, &count);
+        return count;
 }
 
 #endif //__linux__
@@ -32,33 +34,40 @@ void Cursor::move(size_t x, size_t y){ std::cout << "\x1B[" << y << ';' << x << 
 void Cursor::reset(){move(0, 0); show();}
 
 OutputBuffer::OutputBuffer(size_t bufferwidth, size_t bufferheight):bufferwidth(bufferwidth),bufferheight(bufferheight){
-    for(int i = 0; i < bufferwidth; i++){
 
-        std::vector<char> column;
-        buffer.push_back(column);
-        for(int j = 0; j < bufferheight; j++){
-            buffer[i].push_back(' ');
+        for(int i = 0; i < bufferwidth; i++){
+
+                std::vector<char> column;
+                buffer.push_back(column);
+                for(int j = 0; j < bufferheight; j++){
+                buffer[i].push_back(' ');
+                }
         }
-    }
 }
 void OutputBuffer::setbuffer(size_t i, size_t j, char c){
-    assert(i >= 0 && i < bufferwidth);
-    assert(j >= 0 && j < bufferheight);
-    buffer[i][j] = c;
+
+        assert(i >= 0 && i < bufferwidth);
+        assert(j >= 0 && j < bufferheight);
+        buffer[i][j] = c;
 }
 void OutputBuffer::pushtostdout(){
-    for(int i = 0; i < bufferwidth; i++){
-        for(int j = 0; j < bufferheight; j++){
-            coutXY<char>(i, j, buffer[i][j]);
+
+        for(int i = 0; i < bufferwidth; i++){
+                for(int j = 0; j < bufferheight; j++){
+
+                        coutXY<char>(i, j, buffer[i][j]);
+                }
         }
-    }
 }
 void OutputBuffer::clearbuffer(){
-    for(int i = 0; i < bufferwidth; i++){
-        for(int j = 0; j < bufferheight; j++){
-            buffer[i][j] = ' ';
+
+        for(int i = 0; i < bufferwidth; i++){
+                for(int j = 0; j < bufferheight; j++){
+                        
+                        buffer[i][j] = ' ';
+
+                }
         }
-    }
 }
 
 } //namespace outp
