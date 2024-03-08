@@ -1,3 +1,13 @@
+/**
+ * @file engine_main.hpp
+ * @author Klemm Gábor - H8XK58
+ * @brief fiujhsdfhodsjfosdjfds
+ * @version 0.1
+ * @date 2024-03-08
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef K2_ENGINE_ENGINE_MAIN_HPP_
 #define K2_ENGINE_ENGINE_MAIN_HPP_
 

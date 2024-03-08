@@ -40,10 +40,30 @@ public:
          * @param theta - abban az esetben, ha forgatásmátrixról van szó, kell mennyivel forgat
          */
         Mat4(int type = 0, double theta = 0);
-        
+        /**
+         * @brief Mátrix indexelő operátor, valszeg le fogom cserélni setter/getterekre
+         *        az átláthatóság érdekében
+         * 
+         * @param i - sor
+         * @param j - oszlop
+         * @note Hű a tradicionális mátrix notációhoz
+         * @return double& 
+         */
         double& operator()(int i, int j){return body[i][j];};
+        /**
+         * @brief Mateimatikai definíció szerint szoroz össze két mátrixot
+         * 
+         * @param rhs_m - jobb oldali mátrix paraméter
+         * @return Mat4 
+         */
         Mat4 operator*(const Mat4& rhs_m) const;
         Mat4& operator*=(const Mat4& rhs_m);
+        /**
+         * @brief Vektor szorzása balról mátrixxal
+         * 
+         * @param rhs_v - jobb oldali vektor paraméter
+         * @return Vec4 
+         */
         Vec4 operator*(const Vec4& rhs_v) const;
     
 
