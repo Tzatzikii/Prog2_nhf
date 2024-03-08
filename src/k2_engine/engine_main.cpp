@@ -23,6 +23,7 @@ void Renderer::render(){
                 RenderTriangle& current = flattriangles[i];
                 rasterize(current);
         }
+        flattriangles.clear();
         outbuf.pushtostdout();
         outbuf.clearbuffer();
 
@@ -169,9 +170,6 @@ void Renderer::rasterize(RenderTriangle& t){
         VX min = VX2;
 
 
-
-
-flattriangles.clear();
 }
 
 } //namespace k_engine

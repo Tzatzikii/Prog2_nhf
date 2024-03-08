@@ -54,7 +54,8 @@ public:
 
         Ept(int x, int y, double luminosity):x(x), y(y), luminosity(luminosity){}
 
-}
+};
+
 class Triangle{
         Vec4 v0;
         Vec4 v1;
