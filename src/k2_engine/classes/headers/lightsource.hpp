@@ -30,22 +30,23 @@ class Lightsource{
 
         Vec4 pos;
         double brightness;
-        double lightdistance;
+        double range;
 
 public:
 
         /**
          * @brief Csinál egy új fényforrást
          * 
-         * @param pos 
+         * @param pos
          * @param dist 
          * @param bright 
          */
-        Lightsource(Vec4 pos, double dist, double bright):pos(pos),lightdistance(dist),brightness(bright){}
-        Vec4 getpos(){return pos;}
-        double getdist(){return lightdistance;}
-        double getbrightness(){return brightness;}
-        void setdist(double dist){lightdistance = dist;}
+        Lightsource(Vec4 pos, double range, double brightness)
+                :pos(pos),range(range),brightness(brightness){}
+        Vec4 get_pos(){return pos;}
+        double get_range(){return range;}
+        double get_brightness(){return brightness;}
+        void set_range(double new_range){range = new_range;}
 
 }; // class Lightsource
 

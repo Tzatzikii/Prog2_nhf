@@ -20,9 +20,9 @@ namespace k2_engine{
  * @brief Eddig az egyetlen osztály a modulban, egy nagyon triviális
  *        osztály, triviális változókkal, tulajdonképpen csak változók
  *        tárolására van létrehozva
- * @param rotX - a kamera x tengely körüli elfordulása
- * @param rotY - a kamera y tengely körüli elfordulása
- * @param rotZ - a kamera z tengely körüli elfordulása 
+ * @param rad_x - a kamera x tengely körüli elfordulása
+ * @param rad_x - a kamera y tengely körüli elfordulása
+ * @param rad_z - a kamera z tengely körüli elfordulása 
  *               (Habár ezt kétlem, hogy bármikor meg kéne változtatni, azért nem konstans)
  * @param pos - egy négy dimenziós vektor osztály (ld. vec4.hpp)
  * @param screendist - a kamera képernyőtől való távolsága
@@ -30,9 +30,9 @@ namespace k2_engine{
  */
 class Camera{
 
-        double rotX;
-        double rotY;
-        double rotZ;
+        double rot_x;
+        double rot_y;
+        double rot_z;
         Vec4 pos;
         double screendist;
 
@@ -43,9 +43,9 @@ public:
          * @note 10 egységnyi távolságnál közelebb nem éremes
          *       hozni a képernyőhöz (főleg nem 0-ra)
          */
-        Camera(Vec4 pos = Vec4(0, 0, 0), double rotX = 0, double rotY = 0, double rotZ = 0, double screendist = 10)
-                :rotX(rotX),rotY(rotY),rotZ(rotZ),pos(pos),screendist(screendist){}
-                
+        Camera(Vec4 pos = Vec4(0, 0, 0), double rot_x = 0, double rot_y = 0, double rot_z = 0, double screendist = 10)
+                :rot_x(rot_x), rot_y(rot_y), rot_z(rot_z), pos(pos), screendist(screendist){}
+
         /**
          * @brief Megadott vektorértékre állítja a pozíciót
          * 
@@ -71,11 +71,11 @@ public:
          */
         void offsetpos(double xmod, double ymod, double zmod);
 
-        double getrotX() const{return rotX;}
-        double getrotY() const{return rotY;}
-        double getrotZ() const{return rotZ;}
-        double getdist() const{return screendist;}
-        Vec4 getpos() const{return pos;}
+        double get_rot_x() const{return rot_x;}
+        double get_rot_y() const{return rot_y;}
+        double get_rot_z() const{return rot_z;}
+        double get_screendist() const{return screendist;}
+        Vec4 get_pos() const{return pos;}
 
 }; // class Camera
 

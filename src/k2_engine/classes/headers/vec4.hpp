@@ -29,15 +29,16 @@ class Vec4{
 
 public:
 
-        Vec4(double x = 0, double y = 0, double z = 0, double w = 1);
-        double getX() const {return x;}
-        double getY() const {return y;}
-        double getZ() const {return z;}
-        double getW() const {return w;}
-        void setX(int n){x = n;}
-        void setY(int n){y = n;}
-        void setZ(int n){z = n;}
-        void setW(int n){w = n;}
+        Vec4(double x = 0, double y = 0, double z = 0, double w = 1)
+                :x(x), y(y), z(z), w(w){}
+        double get_x() const {return x;}
+        double get_y() const {return y;}
+        double get_z() const {return z;}
+        double get_w() const {return w;}
+        void set_x(int n){x = n;}
+        void set_y(int n){y = n;}
+        void set_z(int n){z = n;}
+        void set_w(int n){w = n;}
         /**
          * @brief *= Operátor mátrixra és vektorra
          *           habár a kódban jobb oldalon van,

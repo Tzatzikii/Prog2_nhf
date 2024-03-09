@@ -36,20 +36,19 @@ extern const char GRAYSCALE[];
  * @brief 
  * @param x - már a terminálon lévő helye
  * @param y - már a terminálon lévő értéke
- * @param flatlumin - a leképzett él "fényességét" írja le (kicsit rossz neve van, de már így marad)
+ * @param luminosity - a leképzett él "fényességét" írja le (kicsit rossz neve van, de már így marad)
  * @note Ahogy a legtöbb helyen, a metódusai ismét magától értetődnek, csak egy tároló
- * TODO Pixellé alakítani és mitigálni az EdgePoint classal, de előbb raszterizálok
  */
-class Vertex2{
+class Px{
         double x, y;
-        double flatlumin;
+        double luminosity;
 
 public:
 
-        Vertex2(double x, double y, double flatlumin);
-        double getX() const{return x;}
-        double getY() const{return y;}
-        double getluminosity() const{return flatlumin;}
+        Px(double x, double y, double luminosity);
+        double get_x() const{return x;}
+        double get_y() const{return y;}
+        double get_luminosity() const{return luminosity;}
     
 };
 
@@ -67,25 +66,16 @@ class Vertex3{
 
 public:
 
-        double getX() const {return x;}
-        double getY() const {return y;}
-        double getZ() const {return z;}
-        double getluminosity() const {return luminosity;}
-        Vertex3(const Vec4&, double lumin);
+        Vertex3(const Vec4& vector, double luminosity)
+                :x(vector.get_x()), y(vector.get_y()), z(vector.get_z()), luminosity(luminosity){}
+        double get_x() const {return x;}
+        double get_y() const {return y;}
+        double get_z() const {return z;}
+        double get_luminosity() const {return luminosity;}
 
     
 };
 
-class Ept{
-
-        int x,y;
-        double luminosity;
-
-public:
-
-        Ept(int x, int y, double luminosity):x(x), y(y), luminosity(luminosity){}
-
-};
 
 /**
  * @brief Az egész motor háromszögekkel dolgozik, ezekből le lehet képezni kb minden polygont,
@@ -96,16 +86,18 @@ public:
  * @param v2 - egyértelműen a második csúcs vektor
  */
 class Triangle{
-        Vec4 v0;
-        Vec4 v1;
-        Vec4 v2;
+
+        Vec4 vector0;
+        Vec4 vector1;
+        Vec4 vector2;
 
 public:
 
-        Triangle(Vec4 v0, Vec4 v1, Vec4 v2):v0(v0),v1(v1),v2(v2){}
-        Vec4 getv0() const {return v0;}
-        Vec4 getv1() const {return v1;}
-        Vec4 getv2() const {return v2;}
+        Triangle(Vec4 vector0, Vec4 vector1, Vec4 vector2)
+                :vector0(vector0),vector1(vector1),vector2(vector2){}
+        Vec4 get_vector0() const {return vector0;}
+        Vec4 get_vector1() const {return vector1;}
+        Vec4 get_vector2() const {return vector2;}
 };
 
 /**
@@ -114,7 +106,7 @@ public:
  *        Három két dimenziós vektor csúcsból áll
  *        Tárol továbbá három "EdgePoint" oszályt tartalmazó vektort,
  *        ami alapján zajlik a raszterizáció
- *
+ *!obsolete leírás !!! ^^^^^^^^^^^^^^^^^^^^^^^^
  * @param vx0
  * @param vx1
  * @param vx2
@@ -127,23 +119,25 @@ public:
  *       így maradt, mert nincs túl sok jelentősége
  *? Átírni balsodrásúra
  */
-class RenderTriangle{
-        Vertex2 vx0;
-        Vertex2 vx1;
-        Vertex2 vx2;
-        std::vector<Ept> edge0;
-        std::vector<Ept> edge1;
-        std::vector<Ept> edge2;
+class Raster{
+
+        Px vertex0;
+        Px vertex1;
+        Px vertex2;
+        std::vector<Px> edge0;
+        std::vector<Px> edge1;
+        std::vector<Px> edge2;
 
 public: 
 
-        RenderTriangle(Vertex2 vx0, Vertex2 vx1, Vertex2 vx2):vx0(vx0),vx1(vx1),vx2(vx2){}
-        std::vector<Ept>& edge0ref(){return edge0;};
-        std::vector<Ept>& edge1ref(){return edge1;};
-        std::vector<Ept>& edge2ref(){return edge2;};
-        Vertex2 getvx0() const {return vx0;}
-        Vertex2 getvx1() const {return vx1;}
-        Vertex2 getvx2() const {return vx2;}
+        Raster(Px vertex0, Px vertex1, Px vertex2)
+                :vertex0(vertex0),vertex1(vertex1),vertex2(vertex2){}
+        std::vector<Px>& ref_edge0(){return edge0;};
+        std::vector<Px>& ref_edge1(){return edge1;};
+        std::vector<Px>& ref_edge2(){return edge2;};
+        Px get_vertex0() const {return vertex0;}
+        Px get_vertex1() const {return vertex1;}
+        Px get_vertex2() const {return vertex2;}
 
 };
 
