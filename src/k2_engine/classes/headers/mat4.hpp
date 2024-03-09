@@ -26,6 +26,7 @@ class Vec4;
  * @param enum - a mátrix létrehozásakor létrehozható felsorolás, inkább nem globálisan adtam meg
  */
 class Mat4{
+        
         int type;
         int theta;
         double body[4][4];
@@ -40,16 +41,8 @@ public:
          * @param theta - abban az esetben, ha forgatásmátrixról van szó, kell mennyivel forgat
          */
         Mat4(int type = 0, double theta = 0);
-        /**
-         * @brief Mátrix indexelő operátor, valszeg le fogom cserélni setter/getterekre
-         *        az átláthatóság érdekében
-         * 
-         * @param i - sor
-         * @param j - oszlop
-         * @note Hű a tradicionális mátrix notációhoz
-         * @return double& 
-         */
-        double& operator()(int i, int j){return body[i][j];};
+        double get_scalar(int i, int j){return body[i][j];}
+        void set_scalar(int i, int j, double n){body[i][j] = n;}
         /**
          * @brief Mateimatikai definíció szerint szoroz össze két mátrixot
          * 

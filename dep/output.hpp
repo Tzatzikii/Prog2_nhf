@@ -155,7 +155,7 @@ inline void clrscrn(){ std::cout << "\x1B[2J"; }
  *                  a duplikálásnak adjon értelmet
  */
 template <typename T>
-inline void coutXY(size_t x, size_t y, const T c, bool duplicate = true, bool stretch = true){
+inline void cout_xy(size_t x, size_t y, const T c, bool duplicate = true, bool stretch = true){
 
         if(stretch) x*=2;
         Cursor().move(x, y);
@@ -194,7 +194,7 @@ public:
          * @brief Kiüríti a buffert
          * 
          */
-        void clearbuffer();
+        void clear_buffer();
 
         /**
          * @brief Adott indexre lehet tölteni a bufferbe, túlindexelés
@@ -204,13 +204,13 @@ public:
          * @param j - A sor indexe
          * @param c - A bufferbe irandó karakter
          */
-        void setbuffer(size_t i, size_t j, char c);
+        void set_buffer(size_t i, size_t j, char c);
 
         /**
          * @brief Kiírja a buffer tartalmát a standart output-ra
          * a megfelelő oszlop- és sorindexű helyre
          */
-        void pushtostdout();
+        void push_to_stdout();
 
 };
 

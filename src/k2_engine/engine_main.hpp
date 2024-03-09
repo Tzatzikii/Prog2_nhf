@@ -35,41 +35,40 @@ extern const size_t TERMINAL_HEIGHT;
 double interpolate(double n0, double n1, double diff);
 
 class Renderer{
+
         std::vector<Triangle> globaltriangles;
-        std::vector<RenderTriangle> flattriangles;
+        std::vector<Raster> rasters;
 
         std::vector<Vec4> globalvectors;
-        std::vector<Lightsource> lights;
-        int flatscreenoffsetX;
-        int flatscreenoffsetY;
+        std::vector<Lightsource> lightsources;
+        int screenoffset_x;
+        int screenoffset_y;
 
         outp::OutputBuffer outbuf{TERMINAL_WIDTH, TERMINAL_HEIGHT};
 
         Vertex3 set_realtive_vertex(Vec4 v);
-        Vertex2 project_vertex(Vertex3& vx);
+        Px project_vertex(Vertex3& vx);
 
-        void set_relative_vertices();
-        void project_vertices();
         double calculate_luminosity(Vec4& v);
 
-
-        void plothigh_interp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& vertexarray);
-        void plotlow_inpterp(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& vertexarray);
+        void plothigh_interp(const Px& v0, const Px& v1, std::vector<Px>& vertexarray);
+        void plotlow_inpterp(const Px& v0, const Px& v1, std::vector<Px>& vertexarray);
 
 public:
+
         Camera camera;
-        Renderer():flatscreenoffsetX(TERMINAL_WIDTH/2),flatscreenoffsetY(TERMINAL_HEIGHT/2){}
+        Renderer()
+                :screenoffset_x(TERMINAL_WIDTH/2),screenoffset_y(TERMINAL_HEIGHT/2){}
         
-        void addtriangle(Triangle triangle);
-        void addtriangle(Vec4& v0, Vec4& v1, Vec4& v2);
-        void addlsource(Lightsource lsource);
+        void add_triangle(Triangle triangle);
+        void add_triangle(Vec4& v0, Vec4& v1, Vec4& v2);
+        void add_lightsource(Lightsource lightsource);
 
         void render();
-        void rasterize(RenderTriangle& t);
+        void rasterize(Raster& t);
 
-        void bresenham(const Vertex2& v0, const Vertex2& v1, std::vector<Ept>& edge);
+        void bresenham(const Px& v0, const Px& v1, std::vector<Px>& edge);
         
-
         }; 
 }
 

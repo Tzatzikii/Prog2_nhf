@@ -2,7 +2,9 @@
 
 namespace k2_engine{
 
-Mat4::Mat4(int type, double theta):type(type), theta(theta){
+Mat4::Mat4(int type, double theta)
+        :type(type), theta(theta){
+
     for(int i = 0; i < 4; i++){
         for(int j = 0; j < 4; j++){
             if(i == j) body[i][j] = 1;
@@ -49,10 +51,10 @@ Vec4 Mat4::operator*(const Vec4& rhs_v) const{
     double x, y, z, w;
     x = y = z = w = 0;
     for(int j = 0; j < 4; j++){
-        x += rhs_v.getX()*body[0][j];
-        y += rhs_v.getY()*body[1][j];
-        z += rhs_v.getZ()*body[2][j];
-        w += rhs_v.getW()*body[3][j];
+        x += rhs_v.get_x()*body[0][j];
+        y += rhs_v.get_y()*body[1][j];
+        z += rhs_v.get_z()*body[2][j];
+        w += rhs_v.get_w()*body[3][j];
         //std::cout << "x: " << x << " y: " << y << " z: " << z << std::endl;
     }
     return Vec4(x, y, z, w);
