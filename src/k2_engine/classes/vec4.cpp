@@ -12,6 +12,7 @@ Vec4& Vec4::operator*=(const Mat4& lhs_m){  //lhs_matrix, mert igazából nem de
 }
 
 Vec4 Vec4::operator-(const Vec4& rhs_v) const{
+        
         return Vec4(x-rhs_v.x, y-rhs_v.y, z-rhs_v.z, w-rhs_v.w);
 }      
 
