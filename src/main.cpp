@@ -5,9 +5,9 @@ int main(){
 
         outp::clrscrn();
         Renderer renderer;
-        renderer.add_triangle(Triangle(Vec4(-10, 20, 0), Vec4(10, 0, 0), Vec4(-10, 0, 5)));
-        renderer.add_triangle(Triangle(Vec4(-10, 20, 0), Vec4(10, 0, 0), Vec4(10, 20, -5)));
-
+        // renderer.add_triangle(Triangle(Vec4(-10, 20, 0), Vec4(10, 0, 0), Vec4(-10, 0, 5)));
+        // renderer.add_triangle(Triangle(Vec4(-10, 20, 0), Vec4(10, 0, 0), Vec4(10, 20, -5)));
+        renderer.add_triangle(Triangle(Vec4(-10, 8, 10), Vec4(0, 25, 10), Vec4(10, 5, 10)));
         renderer.add_lightsource(Lightsource(Vec4(-50, 0, -20), 100, 20));
         renderer.camera.offsetpos(0, 0, -10);
 

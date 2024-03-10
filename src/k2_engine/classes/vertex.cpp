@@ -4,8 +4,6 @@ namespace k2_engine{
 
 const char GRAYSCALE[] = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'.";
 
-Px::Px(double x, double y, double luminosity):x(x),y(y),luminosity(luminosity){}
-
 char calculate_grayscale(double luminosity){
 
         if(luminosity == 0) return 0;

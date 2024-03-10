@@ -18,12 +18,15 @@ void Rawmode::enable(){
         atexit(disable);
         raw.c_lflag &= ~(ECHO | ICANON);
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+
 }
+
 int kbhit(){
 
         int count = 0;
         ioctl(STDIN_FILENO, FIONREAD, &count);
         return count;
+
 }
 
 #endif //__linux__
@@ -41,20 +44,21 @@ OutputBuffer::OutputBuffer(size_t bufferwidth, size_t bufferheight):bufferwidth(
                 buffer.push_back(column);
                 for(int j = 0; j < bufferheight; j++){
                 buffer[i].push_back(' ');
+
                 }
         }
 }
 void OutputBuffer::set_buffer(size_t i, size_t j, char c){
-
         assert(i >= 0 && i < bufferwidth);
         assert(j >= 0 && j < bufferheight);
         buffer[i][j] = c;
 }
+
 void OutputBuffer::push_to_stdout(){
 
         for(int i = 0; i < bufferwidth; i++){
-                for(int j = 0; j < bufferheight; j++){
 
+                for(int j = 0; j < bufferheight; j++){
                         cout_xy<char>(i, j, buffer[i][j]);
                 }
         }
@@ -62,10 +66,9 @@ void OutputBuffer::push_to_stdout(){
 void OutputBuffer::clear_buffer(){
 
         for(int i = 0; i < bufferwidth; i++){
+
                 for(int j = 0; j < bufferheight; j++){
-
                         buffer[i][j] = ' ';
-
                 }
         }
 }

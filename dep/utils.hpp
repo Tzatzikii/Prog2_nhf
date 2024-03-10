@@ -16,7 +16,7 @@
 
 namespace k2_engine{
 
-//#define DEBUG
+#define DEBUG
 
 /**
  * @brief Felcseréli a két paraméterét

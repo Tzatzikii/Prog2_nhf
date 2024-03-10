@@ -5,10 +5,11 @@ namespace k2_engine{
 Mat4::Mat4(int type, double theta)
         :type(type), theta(theta){
 
-    for(int i = 0; i < 4; i++){
-        for(int j = 0; j < 4; j++){
-            if(i == j) body[i][j] = 1;
-            else body[i][j] = 0;
+        for(int i = 0; i < 4; i++){
+                for(int j = 0; j < 4; j++){
+                if(i == j) body[i][j] = 1;
+                else body[i][j] = 0;
+                }
         }
 
         double pc = cos(theta);

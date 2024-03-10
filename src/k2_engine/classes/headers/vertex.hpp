@@ -40,14 +40,17 @@ extern const char GRAYSCALE[];
  * @note Ahogy a legtöbb helyen, a metódusai ismét magától értetődnek, csak egy tároló
  */
 class Px{
-        double x, y;
+        int x, y;
         double luminosity;
 
 public:
 
-        Px(double x, double y, double luminosity);
-        double get_x() const{return x;}
-        double get_y() const{return y;}
+        Px(int x, int y, double luminosity):
+                x(x), y(y), luminosity(luminosity){}
+        Px(double x, double y, double luminosity):
+                x((int)std::round(x)), y((int)std::round(y)), luminosity(luminosity){}
+        int get_x() const{return x;}
+        int get_y() const{return y;}
         double get_luminosity() const{return luminosity;}
     
 };

@@ -30,9 +30,7 @@ void Renderer::render(){
         }
 
         rasters.clear();
-        #ifndef DEBUG
         outbuf.push_to_stdout();
-        #endif //DEBUG
         outbuf.clear_buffer();
 
 }
@@ -146,14 +144,12 @@ void Renderer::plotlow_inpterp(const Px& v0, const Px& v1, std::vector<Px>& edge
         int dx = round(v1.get_x() - v0.get_x());
         int dy = round(v1.get_y() - v0.get_y());
         int yi = 1;
-        #ifdef DEBUG
-        std::cout << "v0 luminosity: " << v0.get_luminosity() << "\nv1 luminosity: " << v0.get_luminosity() << std::endl; 
-        #endif //DEBUG
+
         if(dy < 0){
 
                 yi = -1;
                 dy = -dy;
-
+                
         }
 
         int D = (2*dy) - dx;
@@ -172,16 +168,11 @@ void Renderer::plotlow_inpterp(const Px& v0, const Px& v1, std::vector<Px>& edge
                 }
 
                 if(D > 0){
-
                         y += yi;
                         D += 2*(dy - dx);
-
-                }
-
+}
                 else{
-
                         D+= 2*dy;
-
                 }
         }
 }
@@ -194,25 +185,17 @@ void Renderer::bresenham(const Px& v0, const Px& v1, std::vector<Px>& edge){
         if(abs(dy) < abs(dx)){
 
                 if(dx < 0){
-
                         plotlow_inpterp(v1, v0, edge);
-
                 }
                 else{
-
                         plotlow_inpterp(v0, v1, edge);
-
                 }
         }else{
                 if(dy < 0){
-
                         plothigh_interp(v1, v0, edge);
-
                 }
                 else{
-
                         plothigh_interp(v0, v1, edge);
-
                 }
         }
 }
@@ -226,8 +209,83 @@ void Renderer::rasterize(Raster& r){
         bresenham(r.get_vertex0(), r.get_vertex1(), edge0);
         bresenham(r.get_vertex1(), r.get_vertex2(), edge1);
         bresenham(r.get_vertex2(), r.get_vertex0(), edge2);
+
+        int y0 = r.get_vertex0().get_y();
+        int y1 = r.get_vertex1().get_y();
+        int y2 = r.get_vertex2().get_y();  
         
-        
+        std::vector<Px>* canonical = &edge0;
+        std::vector<Px>* reverse = &edge2;
+        std::vector<Px>* third = &edge1;
+
+        int y_max = y0;
+        int y_min;
+
+        if(y1 > y_max){
+                y_max = y1;
+                canonical = &edge1;
+                reverse = &edge0;
+                third = &edge2;
+                y_min = std::min(y0, y2);
+        }
+
+        if(y2 > y_max){
+                y_max = y2;
+                canonical = &edge2;
+                reverse = &edge1;
+                third = &edge0;
+                y_min = std::min(y0, y1);
+        }
+
+        int c_iter = 0;
+        int r_iter = reverse->size() - 1;
+
+        for(int y = y_max; y > y_min; y--){
+                outbuf.set_buffer(2, y,'#'); 
+                
+                #ifdef DEBUG
+
+                outp::cout_xy<int>(0, TERMINAL_HEIGHT+2, c_iter, false, false);
+                std::cout << " :canonical iterator ";
+                outp::cout_xy<int>(0, TERMINAL_HEIGHT+3, r_iter, false, false);
+                std::cout << " :reverse iterator ";
+
+                #endif //DEBUG
+
+                if(c_iter >= canonical->size()){
+                        canonical = third;
+                        c_iter = 0;
+
+                        #ifdef DEBUG
+                        std::cout<<" RESET";
+                        #endif //DEBUG
+                }
+
+                if(r_iter < 0){
+                        reverse = third;
+                        r_iter = reverse->size();
+
+                        #ifdef DEBUG
+                        std::cout<<" RESET";
+                        #endif //DEBUG
+                }
+                
+                Px& current_c = (*canonical)[c_iter];
+                Px& current_r = (*reverse)[r_iter];
+
+                for(int x = current_c.get_x(); x < current_r.get_x(); x++){
+
+                        double ratio = x/std::max(1, current_c.get_x());
+                        double luminosity = interpolate(current_c.get_luminosity(), current_r.get_luminosity(), ratio);
+
+                        if(boundary(x, 0, TERMINAL_WIDTH) && boundary(y, 0, TERMINAL_HEIGHT)){
+                                outbuf.set_buffer(x, y, '#');
+                        }
+                }
+
+                c_iter++;
+                r_iter--;
+        }
 }
 
 } //namespace k_engine
